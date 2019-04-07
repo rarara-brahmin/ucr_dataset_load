@@ -59,7 +59,6 @@ def download_and_extract( password ):
     return
 
 def get_datalist():
-    print(datalistPath)
     dataname = np.loadtxt(datalistPath, dtype="unicode", delimiter=",", skiprows=1, usecols=(2))
     datalist = np.loadtxt(datalistPath, dtype="unicode", delimiter=",", skiprows=1, usecols=(0,1,3,4,5,6,7,8,9,10,11))
 
