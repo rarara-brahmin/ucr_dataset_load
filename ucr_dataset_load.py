@@ -13,7 +13,9 @@ datalistURL = "https://www.cs.ucr.edu/~eamonn/time_series_data_2018/DataSummary.
 datalistPath = "./DataSummary.csv"
 datalistTitle = "DataSummary.csv"
 
-# Constant Variable
+dataname_list = []
+
+# Inner Access Number of Constant Variable
 _ID = 0
 _Type = 1
 _Train = 2
@@ -25,6 +27,33 @@ _DTW_learned_w = 7
 _DTW_w_100 = 8
 _Default_rate = 9
 _Data_donor_editor = 10
+
+# Define Data Information Class
+class DataInfo() :
+    def __init__(self):
+        self.train_num = 0
+        self.test_num = 0
+        self.class_num = 0
+        self.length = 0
+    
+    def get_info( self, dataset_name ):
+        dataset_dict = get_datalist()
+        
+        self.train_num = int(dataset_dict[dataset_name][_Train])
+        self.test_num = int(dataset_dict[dataset_name][_Test])
+        self.class_num = int(dataset_dict[dataset_name][_Class])
+
+        if(dataset_dict[dataset_name][_Length] != "Vary"):
+            self.length = int(dataset_dict[dataset_name][_Length]) - 1
+
+
+
+# Get Dataset Name List
+if( os.path.isfile(datalistTitle) == True):
+    dataname_list = np.loadtxt(datalistPath, dtype="unicode", delimiter=",", skiprows=1, usecols=(2))
+
+# Make Data Information Instance
+datainfo = DataInfo()
 
 def download():
     if( os.path.isfile(datasetPath) ):
@@ -71,6 +100,8 @@ def get_data( datasetName ):
 
     datalist_dict = get_datalist()
 
+    datainfo.get_info( datasetName )
+    
     if(datalist_dict[datasetName][_Length] != "Vary"):
         # Get data length from DataSummary file.
         dataLength = int(datalist_dict[datasetName][_Length])
@@ -101,6 +132,3 @@ def get_data( datasetName ):
         test_label = np.arange(0)
 
     return(train_data, train_label, test_data, test_label)
-
-    
-
