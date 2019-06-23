@@ -60,12 +60,12 @@ def download():
   Download the datasets ZIP file and the spreadsheet file of the datasets.
   """
 
-  dataset_download()
-  datasetlist_download()
-    
+  download_dataseet()
+  download_datasetlist()
+  
   return
   
-def dataset_download():
+def download_dataseet():
   """
   Download the datasets ZIP file.
   """
@@ -87,7 +87,7 @@ def dataset_download():
           
   return
 
-def datasetlist_download():
+def download_datasetlist():
   """
   Download the spreadsheet file of the datasets.
   """
@@ -129,6 +129,7 @@ def download_and_extract( password ):
 
   return
 
+
 def get_datalist():
   """
   Make dictionary of the names and themselves of datasets.
@@ -138,7 +139,26 @@ def get_datalist():
 
   return( dict(zip(dataname, datalist)) )
 
-    
+
+def get_dataset_name_list():
+  """
+  Get the name list of the datasets.
+  If there is not the spreadsheet file of the datasets, it will be downloaded.
+  
+  
+  Returns
+  ----------
+  dataset_name : array of string
+    List of the dataset names.
+  """
+  
+  download_datasetlist()
+  
+  dataname = np.loadtxt(datalistPath, dtype="unicode", delimiter=",", skiprows=1, usecols=(2))
+  
+  return( dataname )
+
+
 def get_data( datasetName ):
   """
   Get the train data and test data with labels.
@@ -162,6 +182,10 @@ def get_data( datasetName ):
     Test data labels.
       
   """
+  
+  traindataPath = "./UCRArchive_2018/" + datasetName + "/" + datasetName + "_TRAIN.tsv"
+  testdataPath = "./UCRArchive_2018/" + datasetName + "/" + datasetName + "_TEST.tsv"
+
   datalist_dict = get_datalist()
 
   datainfo.get_info( datasetName )
